@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
 
     // Prefab de la bomba azul
     public GameObject prefabBombaAzul;
+    private bool playing = false;
 
     private void Awake()
     {
@@ -41,31 +42,35 @@ public class GameManager : MonoBehaviour
     {
         // Iniciamos el juego generando bombas cada frecuenciaBombas segundos
         InvokeRepeating("GenerarBomba", 0f, frecuenciaBombas);
+        playing = true;
     }
 
     // Método que genera una bomba roja o azul aleatoriamente
     private void GenerarBomba()
     {
-        // Generamos un número aleatorio entre 0 y 1
-        float aleatorio = Random.Range(0f, 1f);
-
-        // Si el número aleatorio es menor que 0.5, generamos una bomba roja
-        if (aleatorio < 0.5f)
+        if (playing)
         {
-            // Creamos una bomba roja a partir del prefab
-            GameObject bombaRoja = Instantiate(prefabBombaRoja, puertaBombaRoja.transform.position, Quaternion.identity);
+            // Generamos un número aleatorio entre 0 y 1
+            float aleatorio = Random.Range(0f, 1f);
 
-            // Establecemos la etiqueta de la bomba roja
-            bombaRoja.tag = "BombaRoja";
-        }
-        // Si no, generamos una bomba azul
-        else
-        {
-            // Creamos una bomba azul a partir del prefab
-            GameObject bombaAzul = Instantiate(prefabBombaAzul, puertaBombaAzul.transform.position, Quaternion.identity);
+            // Si el número aleatorio es menor que 0.5, generamos una bomba roja
+            if (aleatorio < 0.5f)
+            {
+                // Creamos una bomba roja a partir del prefab
+                GameObject bombaRoja = Instantiate(prefabBombaRoja, puertaBombaRoja.transform.position, Quaternion.identity);
 
-            // Establecemos la etiqueta de la bomba azul
-            bombaAzul.tag = "BombaAzul";
+                // Establecemos la etiqueta de la bomba roja
+                bombaRoja.tag = "BombaRoja";
+            }
+            // Si no, generamos una bomba azul
+            else
+            {
+                // Creamos una bomba azul a partir del prefab
+                GameObject bombaAzul = Instantiate(prefabBombaAzul, puertaBombaAzul.transform.position, Quaternion.identity);
+
+                // Establecemos la etiqueta de la bomba azul
+                bombaAzul.tag = "BombaAzul";
+            }
         }
     }
 
@@ -80,14 +85,15 @@ public class GameManager : MonoBehaviour
     }
 
     // Método que muestra el panel de game over y detiene el juego
-    /*public void GameOver()
+    public void GameOver()
     {
         // Activamos el panel de game over
         textoGameOver.text = "Game Over";
         // Detenemos el juego
         Time.timeScale = 0f;
-    }*/
-    public void GameOver(int type)
+        playing = false;
+    }
+    /*public void GameOver(int type)
     {
         if (type == 0)
         {
@@ -103,5 +109,5 @@ public class GameManager : MonoBehaviour
         }
         playing = false;
         startButton.SetActive(true);
-    }
+    }*/
 }
