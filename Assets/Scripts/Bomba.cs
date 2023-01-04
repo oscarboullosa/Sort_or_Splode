@@ -13,6 +13,10 @@ public class Bomba : MonoBehaviour
     // Indica si la bomba está siendo arrastrada por el usuario
     private bool estaSiendoArrastrada;
 
+    // La velocidad de movimiento de la bomba
+    public float velocidad;
+
+
     private void Start()
     {
         // Obtenemos el componente Rigidbody2D de la bomba
@@ -21,6 +25,7 @@ public class Bomba : MonoBehaviour
 
     private void Update()
     {
+        
         // Si la bomba está siendo arrastrada por el usuario,
         // la movemos a la posición del ratón
         if (estaSiendoArrastrada)
@@ -28,6 +33,15 @@ public class Bomba : MonoBehaviour
             Vector3 posicionRaton = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             posicionRaton.z = 0f;
             transform.position = posicionRaton;
+        }
+        // Si la bomba no está siendo arrastrada, la movemos aleatoriamente por el mapa
+        else
+        {
+            // Calculamos una dirección aleatoria para mover la bomba
+            float direccion = Random.Range(-2f, 2f);
+
+            // Movemos la bomba hacia la derecha o hacia la izquierda
+            transform.position += transform.right * velocidad * Time.deltaTime * direccion;
         }
     }
 
@@ -47,13 +61,15 @@ public class Bomba : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Si la bomba entra en contacto con una caja...
+        // Si la bomba entra en contacto con una caja azul
         if (other.gameObject.CompareTag("CajaAzul"))
         {
             // Si la bomba y la caja tienen el mismo color, aumentamos la puntuación
             if (other.gameObject.GetComponent<SpriteRenderer>().color == GetComponent<SpriteRenderer>().color)
             {
                 GameManager.instance.AumentarPuntuacion(1);
+                //gameObject.SetActive(false);
+                transform.position = new Vector3(transform.position.x, other.transform.position.y + 40f, transform.position.z);
             }
             // Si la bomba y la caja tienen distinto color, terminamos el juego
             else
@@ -62,7 +78,29 @@ public class Bomba : MonoBehaviour
             }
 
             // Destruimos la bomba
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            //gameObject.SetActive(false);
+        }
+        // Si la bomba entra en contacto con una caja...
+        else if (other.gameObject.CompareTag("CajaRoja"))
+        {
+            // Si la bomba y la caja tienen el mismo color, aumentamos la puntuación
+            if (other.gameObject.GetComponent<SpriteRenderer>().color == GetComponent<SpriteRenderer>().color)
+            {
+                GameManager.instance.AumentarPuntuacion(1);
+                //gameObject.SetActive(false);
+                transform.position = new Vector3(transform.position.x, other.transform.position.y + 40f, transform.position.z);
+            }
+            // Si la bomba y la caja tienen distinto color, terminamos el juego
+            else
+            {
+                GameManager.instance.GameOver();
+            }
+
+            // Destruimos la bomba
+            //Destroy(gameObject);
+            //gameObject.SetActive(false);
+            
         }
     }
 }

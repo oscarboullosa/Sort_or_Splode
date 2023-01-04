@@ -30,7 +30,16 @@ public class GameManager : MonoBehaviour
 
     // Prefab de la bomba azul
     public GameObject prefabBombaAzul;
+
     private bool playing = false;
+
+    //Número de bombas generadas, equivalente a puntos ganados. Con 100 puntos ganas.
+    private int generadas;
+
+    public int maximoGeneradas;
+
+    private int generadasRojas;
+    private int generadasAzules;
 
     private void Awake()
     {
@@ -48,29 +57,40 @@ public class GameManager : MonoBehaviour
     // Método que genera una bomba roja o azul aleatoriamente
     private void GenerarBomba()
     {
-        if (playing)
+        if (playing && generadas <=maximoGeneradas)
         {
+            
             // Generamos un número aleatorio entre 0 y 1
             float aleatorio = Random.Range(0f, 1f);
 
             // Si el número aleatorio es menor que 0.5, generamos una bomba roja
-            if (aleatorio < 0.5f)
+            if (aleatorio < 0.5f && generadasRojas<=50)
             {
+                prefabBombaRoja.SetActive(true);
                 // Creamos una bomba roja a partir del prefab
                 GameObject bombaRoja = Instantiate(prefabBombaRoja, puertaBombaRoja.transform.position, Quaternion.identity);
 
                 // Establecemos la etiqueta de la bomba roja
                 bombaRoja.tag = "BombaRoja";
+                generadas += 1;
+                generadasRojas += 1;
             }
             // Si no, generamos una bomba azul
             else
             {
+                prefabBombaAzul.SetActive(true);
                 // Creamos una bomba azul a partir del prefab
                 GameObject bombaAzul = Instantiate(prefabBombaAzul, puertaBombaAzul.transform.position, Quaternion.identity);
 
                 // Establecemos la etiqueta de la bomba azul
                 bombaAzul.tag = "BombaAzul";
+                generadas += 1;
+                generadasAzules+= 1;
             }
+        }
+        else
+        {
+            GameOver();
         }
     }
 
@@ -93,21 +113,5 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         playing = false;
     }
-    /*public void GameOver(int type)
-    {
-        if (type == 0)
-        {
-            OOT.SetActive(true);
-        }
-        else
-        {
-            DKH.SetActive(true);
-        }
-        foreach (Yoshi yoshi in yoshis)
-        {
-            yoshi.StopGame();
-        }
-        playing = false;
-        startButton.SetActive(true);
-    }*/
+    
 }

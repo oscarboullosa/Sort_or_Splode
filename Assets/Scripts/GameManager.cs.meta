@@ -3,7 +3,13 @@ guid: c7b988fda03ec5041b25ba5881c25ffc
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - textoGameOver: {instanceID: 0}
+  - textoPuntuacion: {instanceID: 0}
+  - puertaBombaRoja: {instanceID: 0}
+  - puertaBombaAzul: {instanceID: 0}
+  - prefabBombaRoja: {fileID: 3976034968448390961, guid: 6a3ee81e8797f744a8d5f5dc720016af, type: 3}
+  - prefabBombaAzul: {fileID: 8960014924664832851, guid: 565bbe69585c3e447b2214e24267a0b6, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
