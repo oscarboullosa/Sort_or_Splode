@@ -33,7 +33,7 @@ public class Bomba : MonoBehaviour
 
 }
     private void Update()
-    {     
+    {
         // Si la bomba está siendo arrastrada por el usuario,
         // la movemos a la posición del ratón
         if (estaSiendoArrastrada)
@@ -41,32 +41,64 @@ public class Bomba : MonoBehaviour
             Vector3 posicionRaton = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             posicionRaton.z = 0f;
             transform.position = posicionRaton;
-   
+
 
         }
         // Si la bomba no está siendo arrastrada, la movemos aleatoriamente por el mapa
         else
         {
             if (cajaRoja.GetComponent<Collider2D>().bounds.Contains(transform.position) || cajaAzul.GetComponent<Collider2D>().bounds.Contains(transform.position))
-            
+
             {
                 GameManager.instance.AumentarPuntuacion(1);
                 transform.Translate(Vector3.up * 100f);
-                
+
             }
             else
             {
                 // Calculamos una dirección aleatoria para mover la bomba
-                float direccion = Random.Range(-2f, 2f);
+                float direccionX = Random.Range(-15f, 15f);
+                float direccionY = Random.Range(-15f, 15f);
                 // Movemos la bomba hacia la derecha o hacia la izquierda
-                transform.position += transform.right * velocidad * Time.deltaTime * direccion;
-            }
-            
-        }
-        
-    
-}
+                transform.position += transform.right * velocidad * Time.deltaTime * direccionX;
 
+                //Movemos la bomba hacia arriba o hacia abajo
+                transform.position += transform.up * velocidad * Time.deltaTime * direccionY;
+                // Obtenemos las coordenadas de la bomba en pantalla
+                Vector3 posicionPantalla = Camera.main.WorldToScreenPoint(transform.position);
+
+                // Obtenemos el ancho y alto de la pantalla en pixels
+                float anchoPantalla = Screen.width;
+                float altoPantalla = Screen.height;
+
+                // Si la bomba se sale de la pantalla por la derecha o por la izquierda,
+                // la movemos de nuevo al borde de la pantalla correspondiente
+                if (posicionPantalla.x < 0)
+                {
+                    Vector3 posicionIzquierda = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, posicionPantalla.z));
+                    transform.position = new Vector3(posicionIzquierda.x, transform.position.y, transform.position.z);
+                }
+                else if (posicionPantalla.x > anchoPantalla)
+                {
+                    Vector3 posicionDerecha = Camera.main.ScreenToWorldPoint(new Vector3(anchoPantalla, 0, posicionPantalla.z));
+                    transform.position = new Vector3(posicionDerecha.x, transform.position.y, transform.position.z);
+                }
+                else if (posicionPantalla.y < 0)
+                {
+                    Vector3 posicionAbajo = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, posicionPantalla.z));
+                    transform.position = new Vector3(transform.position.x, posicionAbajo.y, transform.position.z);
+                }
+                else if (posicionPantalla.y > altoPantalla)
+                {
+                    Vector3 posicionArriba = Camera.main.ScreenToWorldPoint(new Vector3(0, altoPantalla, posicionPantalla.z));
+                    transform.position = new Vector3(transform.position.x, posicionArriba.y, transform.position.z);
+                }
+
+            }
+
+
+        }
+    }
     private void OnMouseDown()
     {
         // Al hacer clic con el ratón sobre la bomba,
