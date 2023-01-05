@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
 
     private bool playing = false;
 
+    private int bombasRojas;
+
     //Número de bombas generadas, equivalente a puntos ganados. Con 100 puntos ganas.
     private int generadas;
 
@@ -66,19 +68,18 @@ public class GameManager : MonoBehaviour
             // Si el número aleatorio es menor que 0.5, generamos una bomba roja
             if (aleatorio < 0.5f && generadasRojas<=50)
             {
-                prefabBombaRoja.SetActive(true);
+                //prefabBombaRoja.SetActive(true);
                 // Creamos una bomba roja a partir del prefab
                 GameObject bombaRoja = Instantiate(prefabBombaRoja, puertaBombaRoja.transform.position, Quaternion.identity);
-
                 // Establecemos la etiqueta de la bomba roja
                 bombaRoja.tag = "BombaRoja";
                 generadas += 1;
-                generadasRojas += 1;
+                bombasRojas += 1;
+
             }
             // Si no, generamos una bomba azul
             else
             {
-                prefabBombaAzul.SetActive(true);
                 // Creamos una bomba azul a partir del prefab
                 GameObject bombaAzul = Instantiate(prefabBombaAzul, puertaBombaAzul.transform.position, Quaternion.identity);
 
@@ -102,6 +103,11 @@ public class GameManager : MonoBehaviour
 
         // Actualizamos el texto de puntuación
         textoPuntuacion.text = puntuacion.ToString();
+    }
+    public int ContadorBombasRojas()
+    {
+
+        return bombasRojas;
     }
 
     // Método que muestra el panel de game over y detiene el juego
