@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     // Instancia única del GameManager
     public static GameManager instance;
 
+    [SerializeField] private List<GameObject> bombas;
+
     // Referencia al panel de game over
     [SerializeField] private TMPro.TextMeshProUGUI textoGameOver;
 
@@ -49,16 +51,30 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
-    private void Start()
+    public void Start()
     {
+        
         // Iniciamos el juego generando bombas cada frecuenciaBombas segundos
-        InvokeRepeating("GenerarBomba", 0f, frecuenciaBombas);
+        bombas.Clear();
         playing = true;
+        
+        InvokeRepeating("GenerarBomba", 5f, frecuenciaBombas);
+        
+        
+        /*while (Time.deltaTime < 5f)
+        {
+            foreach(GameObject bomba in bombas)
+            {
+                bomba.SetActive(false);
+            }
+        }*/
+        textoPuntuacion.text = "0";
     }
 
     // Método que genera una bomba roja o azul aleatoriamente
     private void GenerarBomba()
     {
+        
         if (playing && generadas <=maximoGeneradas)
         {
             
@@ -66,16 +82,17 @@ public class GameManager : MonoBehaviour
             float aleatorio = Random.Range(0f, 1f);
 
             // Si el número aleatorio es menor que 0.5, generamos una bomba roja
-            if (aleatorio < 0.5f && generadasRojas<=50)
+            if (aleatorio < 0.5f && generadasRojas<=75)
             {
                 //prefabBombaRoja.SetActive(true);
                 // Creamos una bomba roja a partir del prefab
                 GameObject bombaRoja = Instantiate(prefabBombaRoja, puertaBombaRoja.transform.position, Quaternion.identity);
+                
                 // Establecemos la etiqueta de la bomba roja
                 bombaRoja.tag = "BombaRoja";
                 generadas += 1;
                 bombasRojas += 1;
-
+                bombas.Add(bombaRoja);
             }
             // Si no, generamos una bomba azul
             else
@@ -87,22 +104,32 @@ public class GameManager : MonoBehaviour
                 bombaAzul.tag = "BombaAzul";
                 generadas += 1;
                 generadasAzules+= 1;
+                bombas.Add(bombaAzul);
             }
         }
-        else
+        
+        /*else
         {
+            
             GameOver();
-        }
+        }*/
     }
 
     // Método que aumenta la puntuación actual
     public void AumentarPuntuacion(int amount)
     {
-        // Aumentamos la puntuación actual
-        puntuacion += amount;
+        if (puntuacion == 100)
+        {
+            Win();
+        }
+        else
+        {
+            // Aumentamos la puntuación actual
+            puntuacion += amount;
 
-        // Actualizamos el texto de puntuación
-        textoPuntuacion.text = puntuacion.ToString();
+            // Actualizamos el texto de puntuación
+            textoPuntuacion.text = puntuacion.ToString();
+        }
     }
     public int ContadorBombasRojas()
     {
@@ -115,9 +142,35 @@ public class GameManager : MonoBehaviour
     {
         // Activamos el panel de game over
         textoGameOver.text = "Game Over";
+        
         // Detenemos el juego
         Time.timeScale = 0f;
+        
+        foreach (GameObject bomba in bombas)
+        {
+            Destroy(bomba);
+        }
+        
+        StopAllCoroutines();
         playing = false;
+    }
+    public void Win()
+    {
+        textoGameOver.text = "Victory!";
+        // Detenemos el juego
+        Time.timeScale = 0f;
+        foreach (GameObject bomba in bombas)
+        {
+            Destroy(bomba);
+        }
+
+        StopAllCoroutines();
+        playing = false;
+
+    }
+    public int ContadorBombas()
+    {
+        return bombas.Count;
     }
     
 }

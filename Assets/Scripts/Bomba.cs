@@ -48,50 +48,98 @@ public class Bomba : MonoBehaviour
         else
         {
             if (cajaRoja.GetComponent<Collider2D>().bounds.Contains(transform.position) || cajaAzul.GetComponent<Collider2D>().bounds.Contains(transform.position))
-
             {
                 GameManager.instance.AumentarPuntuacion(1);
-                transform.Translate(Vector3.up * 100f);
+                transform.Translate(Vector3.up * 5000f);
 
             }
+            
             else
             {
-                // Calculamos una dirección aleatoria para mover la bomba
-                float direccionX = Random.Range(-15f, 15f);
-                float direccionY = Random.Range(-15f, 15f);
-                // Movemos la bomba hacia la derecha o hacia la izquierda
-                transform.position += transform.right * velocidad * Time.deltaTime * direccionX;
+                float coordenadaY = gameObject.transform.position.y;
+                if (coordenadaY < 100)
+                {
+                    // Calculamos una dirección aleatoria para mover la bomba
+                    if (GameManager.instance.ContadorBombas() < 15)
+                    {
+                        float direccionX = Random.Range(-5f, 5f);
+                        float direccionY = Random.Range(-2f, 2f);
+                        // Movemos la bomba hacia la derecha o hacia la izquierda
+                        transform.position += transform.right * velocidad * Time.deltaTime * direccionX;
 
-                //Movemos la bomba hacia arriba o hacia abajo
-                transform.position += transform.up * velocidad * Time.deltaTime * direccionY;
-                // Obtenemos las coordenadas de la bomba en pantalla
-                Vector3 posicionPantalla = Camera.main.WorldToScreenPoint(transform.position);
+                        //Movemos la bomba hacia arriba o hacia abajo
+                        transform.position += transform.up * velocidad * Time.deltaTime * direccionY;
+                    }
+                    else if (GameManager.instance.ContadorBombas() >=15 && GameManager.instance.ContadorBombas() < 25)
+                    {
+                        float direccionX = Random.Range(-15f, 15f);
+                        float direccionY = Random.Range(-12f, 12f);
+                        // Movemos la bomba hacia la derecha o hacia la izquierda
+                        transform.position += transform.right * velocidad * Time.deltaTime * direccionX;
 
-                // Obtenemos el ancho y alto de la pantalla en pixels
-                float anchoPantalla = Screen.width;
-                float altoPantalla = Screen.height;
+                        //Movemos la bomba hacia arriba o hacia abajo
+                        transform.position += transform.up * velocidad * Time.deltaTime * direccionY;
+                    }
+                    else if (GameManager.instance.ContadorBombas() >= 25 && GameManager.instance.ContadorBombas() < 50)
+                    {
+                        float direccionX = Random.Range(-25f, 25f);
+                        float direccionY = Random.Range(-22f, 22f);
+                        // Movemos la bomba hacia la derecha o hacia la izquierda
+                        transform.position += transform.right * velocidad * Time.deltaTime * direccionX;
 
-                // Si la bomba se sale de la pantalla por la derecha o por la izquierda,
-                // la movemos de nuevo al borde de la pantalla correspondiente
-                if (posicionPantalla.x < 0)
-                {
-                    Vector3 posicionIzquierda = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, posicionPantalla.z));
-                    transform.position = new Vector3(posicionIzquierda.x, transform.position.y, transform.position.z);
-                }
-                else if (posicionPantalla.x > anchoPantalla)
-                {
-                    Vector3 posicionDerecha = Camera.main.ScreenToWorldPoint(new Vector3(anchoPantalla, 0, posicionPantalla.z));
-                    transform.position = new Vector3(posicionDerecha.x, transform.position.y, transform.position.z);
-                }
-                else if (posicionPantalla.y < 0)
-                {
-                    Vector3 posicionAbajo = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, posicionPantalla.z));
-                    transform.position = new Vector3(transform.position.x, posicionAbajo.y, transform.position.z);
-                }
-                else if (posicionPantalla.y > altoPantalla)
-                {
-                    Vector3 posicionArriba = Camera.main.ScreenToWorldPoint(new Vector3(0, altoPantalla, posicionPantalla.z));
-                    transform.position = new Vector3(transform.position.x, posicionArriba.y, transform.position.z);
+                        //Movemos la bomba hacia arriba o hacia abajo
+                        transform.position += transform.up * velocidad * Time.deltaTime * direccionY;
+                    }
+                    else if (GameManager.instance.ContadorBombas() >= 50 && GameManager.instance.ContadorBombas() < 80)
+                    {
+                        float direccionX = Random.Range(-35f, 35f);
+                        float direccionY = Random.Range(-32f, 32f);
+                        // Movemos la bomba hacia la derecha o hacia la izquierda
+                        transform.position += transform.right * velocidad * Time.deltaTime * direccionX;
+
+                        //Movemos la bomba hacia arriba o hacia abajo
+                        transform.position += transform.up * velocidad * Time.deltaTime * direccionY;
+                    }
+                    else if (GameManager.instance.ContadorBombas() >= 80)
+                    {
+                        float direccionX = Random.Range(-50f, 50f);
+                        float direccionY = Random.Range(-20f, 20f);
+                        // Movemos la bomba hacia la derecha o hacia la izquierda
+                        transform.position += transform.right * velocidad * Time.deltaTime * direccionX;
+
+                        //Movemos la bomba hacia arriba o hacia abajo
+                        transform.position += transform.up * velocidad * Time.deltaTime * direccionY;
+                    }
+
+                    // Obtenemos las coordenadas de la bomba en pantalla
+                    Vector3 posicionPantalla = Camera.main.WorldToScreenPoint(transform.position);
+
+                    // Obtenemos el ancho y alto de la pantalla en pixels
+                    float anchoPantalla = Screen.width;
+                    float altoPantalla = Screen.height;
+
+                    // Si la bomba se sale de la pantalla por la derecha o por la izquierda,
+                    // la movemos de nuevo al borde de la pantalla correspondiente
+                    if (posicionPantalla.x < 0)
+                    {
+                        Vector3 posicionIzquierda = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, posicionPantalla.z));
+                        transform.position = new Vector3(posicionIzquierda.x, transform.position.y, transform.position.z);
+                    }
+                    else if (posicionPantalla.x > anchoPantalla)
+                    {
+                        Vector3 posicionDerecha = Camera.main.ScreenToWorldPoint(new Vector3(anchoPantalla, 0, posicionPantalla.z));
+                        transform.position = new Vector3(posicionDerecha.x, transform.position.y, transform.position.z);
+                    }
+                    else if (posicionPantalla.y < 0)
+                    {
+                        Vector3 posicionAbajo = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, posicionPantalla.z));
+                        transform.position = new Vector3(transform.position.x, posicionAbajo.y, transform.position.z);
+                    }
+                    else if (posicionPantalla.y > altoPantalla)
+                    {
+                        Vector3 posicionArriba = Camera.main.ScreenToWorldPoint(new Vector3(0, altoPantalla, posicionPantalla.z));
+                        transform.position = new Vector3(transform.position.x, posicionArriba.y, transform.position.z);
+                    }
                 }
 
             }
@@ -150,6 +198,20 @@ public class Bomba : MonoBehaviour
             }
             
         }
+        else if (other.gameObject.CompareTag("BombaRoja"))
+        {
+            if(other.gameObject.GetComponent<SpriteRenderer>().color != GetComponent<SpriteRenderer>().color)
+            {
+                GameManager.instance.GameOver();
+            }
+        }
+        else if (other.gameObject.CompareTag("BombaAzul"))
+        {
+            if (other.gameObject.GetComponent<SpriteRenderer>().color != GetComponent<SpriteRenderer>().color)
+            {
+                GameManager.instance.GameOver();
+            }
+        }
     }
     private void OnTriggerStay2D(Collider2D other)
     {
@@ -159,6 +221,7 @@ public class Bomba : MonoBehaviour
                 transform.position = cajaRoja.transform.position;
         }
     }
+
 
 
     private void estaEnContactoConBorde()
@@ -190,5 +253,6 @@ public class Bomba : MonoBehaviour
         // Si no se ha detectado ningún contacto con el borde, devolvemos false
         
     }
+
 
 }
