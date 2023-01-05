@@ -11,6 +11,7 @@ public class Bomba : MonoBehaviour
     private Vector3 posicionInicial;
 
     public GameObject cajaRoja;
+    public GameObject cajaAzul;
 
     // Indica si la bomba está siendo arrastrada por el usuario
     private bool estaSiendoArrastrada;
@@ -46,7 +47,7 @@ public class Bomba : MonoBehaviour
         // Si la bomba no está siendo arrastrada, la movemos aleatoriamente por el mapa
         else
         {
-            if (cajaRoja.GetComponent<Collider2D>().bounds.Contains(transform.position))
+            if (cajaRoja.GetComponent<Collider2D>().bounds.Contains(transform.position) || cajaAzul.GetComponent<Collider2D>().bounds.Contains(transform.position))
             
             {
                 GameManager.instance.AumentarPuntuacion(1);
@@ -96,6 +97,7 @@ public class Bomba : MonoBehaviour
             else
             {
                 GameManager.instance.GameOver();
+                GameManager.instance.AumentarPuntuacion(-1);
             }
         }
         // Si la bomba entra en contacto con una caja...
@@ -106,7 +108,7 @@ public class Bomba : MonoBehaviour
             {
                 if (!estaSiendoArrastrada)
                 {
-                    GameManager.instance.AumentarPuntuacion(1);
+                    GameManager.instance.AumentarPuntuacion(0);
                 }
             }
             // Si la bomba y la caja tienen distinto color, terminamos el juego
