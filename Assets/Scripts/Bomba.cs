@@ -63,7 +63,7 @@ public class Bomba : MonoBehaviour
                     if (GameManager.instance.ContadorBombas() < 15)
                     {
                         float direccionX = Random.Range(-5f, 5f);
-                        float direccionY = Random.Range(-2f, 2f);
+                        float direccionY = Random.Range(-10f, 10f);
                         // Movemos la bomba hacia la derecha o hacia la izquierda
                         transform.position += transform.right * velocidad * Time.deltaTime * direccionX;
 
@@ -219,6 +219,11 @@ public class Bomba : MonoBehaviour
         {
             if (other.gameObject.GetComponent<SpriteRenderer>().color == GetComponent<SpriteRenderer>().color)
                 transform.position = cajaRoja.transform.position;
+        }
+        if (other.gameObject.CompareTag("CajaAzul"))
+        {
+            if (other.gameObject.GetComponent<SpriteRenderer>().color == GetComponent<SpriteRenderer>().color)
+                transform.position = cajaAzul.transform.position;
         }
     }
 
